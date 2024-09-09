@@ -1,5 +1,6 @@
 const pool = require("../config/db");
 
+//Create Files
 async function saveFile(fileData) {
   try {
     const connection = await pool.getConnection();
@@ -24,6 +25,30 @@ async function saveFile(fileData) {
   }
 }
 
+//Find File By ID
+async function findFileByID(fileId) {
+  try {
+    const connection = await pool.getConnection();
+
+    const query = `
+    SELECT * FROM UserFiles WHERE id = ?`;
+
+    const [rows] = await connection.execute(query, [fileId]);
+
+    connection.release();
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return rows[0];
+  } catch (error) {
+    console.error("Error finding file by ID:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   saveFile,
+  findFileByID,
 };

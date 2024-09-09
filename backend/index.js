@@ -39,12 +39,19 @@ app.delete(
   userController.deleteUserById
 );
 
+//File
 app.post(
   "/uploadFiles",
   authenticationToken,
-  authorization("Admin", "Moderator", "User"),
+  authorization("Admin", "Moderator"),
   fileController.upload.array("files", 10),
   fileController.uploadFiles
+);
+
+app.get(
+  "/files/:id/download",
+  authenticationToken,
+  fileController.downloadFile
 );
 
 //TEST
