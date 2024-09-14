@@ -1,1 +1,2 @@
-
+# Ignore nod_module folder
+node_module/
