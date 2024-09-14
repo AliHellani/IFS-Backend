@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frontend Test</title>
+    <link rel="stylesheet" href="../uploadFile/style.css" />
+  </head>
+  <body>
+    <h1>Frontend Test</h1>
+
+    <section>
+      <h2>Upload Files</h2>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="files" multiple required />
+        <button type="submit">Upload Files</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Uploaded Files</h2>
+      <button id="fetchFilesButton">Fetch All Files</button>
+      <div id="uploadedFiles"></div>
+    </section>
+    <script src="../uploadFile/upload.js"></script>
+  </body>
+</html>

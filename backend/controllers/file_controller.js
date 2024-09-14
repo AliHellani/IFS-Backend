@@ -4,6 +4,7 @@ const ffmpeg = require("fluent-ffmpeg");
 const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 const path = require("path");
 const fs = require("fs");
+const { exec } = require("child_process");
 const fileRepository = require("../repositories/file_repository");
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
@@ -84,6 +85,34 @@ async function uploadFiles(req, res) {
             .save(outputPath);
         });
 
+        // Encrypt the video using Shaka Packager
+        /*const encryptedFilename = `encrypted-${storedFilename}`;
+        const encryptionCommand = `
+          packager input=${outputPath},stream=video,output=${path.join(
+          "uploads",
+          encryptedFilename
+        )} \
+          --enable_playready_encryption \
+          --key_server_url https://license-server-url \
+          --content_id <content-id> \
+          --signer <signer> \
+          --aes_signing_key <aes-signing-key> \
+          --aes_signing_iv <aes-signing-iv> \
+          --mpd_output ${path.join(
+            "uploads",
+            `encrypted-${storedFilename}.mpd`
+          )}
+        `;
+        await new Promise((resolve, reject) => {
+          exec(encryptionCommand, (error, stdout, stderr) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
+        });
+        */
         storedFilename = resizedFilename;
       }
 
@@ -94,7 +123,8 @@ async function uploadFiles(req, res) {
         file_type: file.mimetype,
         file_size: file.size,
       };
-      return fileRepository.saveFile(fileData);
+      await fileRepository.saveFile(fileData);
+      return fileData;
     });
     const results = await Promise.all(uploadPromises);
     res.status(201).json({ message: "Files uploaded successfully", results });
@@ -143,8 +173,21 @@ async function downloadFile(req, res) {
   }
 }
 
+// Display All Files
+async function displayAllFiles(req, res) {
+  try {
+    const files = await fileRepository.findAllFiles();
+    res.json({ results: files });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving files", error: error.message });
+  }
+}
+
 module.exports = {
   uploadFiles,
   downloadFile,
+  displayAllFiles,
   upload,
 };

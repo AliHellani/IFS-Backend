@@ -48,7 +48,27 @@ async function findFileByID(fileId) {
   }
 }
 
+// Find All Files
+async function findAllFiles() {
+  try {
+    const connection = await pool.getConnection();
+
+    const query = `
+    SELECT * FROM UserFiles ORDER BY upload_date DESC`;
+
+    const [rows] = await connection.execute(query);
+
+    connection.release();
+
+    return rows;
+  } catch (error) {
+    console.error("Error finding all files:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   saveFile,
   findFileByID,
+  findAllFiles,
 };

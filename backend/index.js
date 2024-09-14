@@ -3,6 +3,7 @@ require("dotenv").config({ path: "./secret.env" });
 const express = require("express");
 const pool = require("./config/db");
 const app = express();
+const path = require("path");
 const PORT = process.env.PORT || 3001;
 
 const userController = require("./controllers/user_controller");
@@ -10,8 +11,11 @@ const fileController = require("./controllers/file_controller");
 const authenticationToken = require("./middleware/auth");
 const authorization = require("./middleware/roleAuthorization");
 
+app.use(express.static(path.join(__dirname, "../frontend")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //User
 app.post("/register", userController.createUser);
@@ -53,6 +57,8 @@ app.get(
   authenticationToken,
   fileController.downloadFile
 );
+
+app.get("/allFiles", authenticationToken, fileController.displayAllFiles);
 
 //TEST
 app.get("/test", async (req, res) => {

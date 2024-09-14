@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frontend Test</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1>Frontend Test</h1>
+
+    <section>
+      <h2>Register</h2>
+      <form id="registerForm" enctype="multipart/form-data">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <select id="role" required>
+          <option value="Admin">Admin</option>
+          <option value="Moderator">Moderator</option>
+          <option value="User">User</option>
+        </select>
+        <button type="submit">Register</button>
+      </form>
+
+      <button id="loginRedirect">Go to Login</button>
+    </section>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

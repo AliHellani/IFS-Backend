@@ -58,9 +58,14 @@ async function verifyUser(req, res) {
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "24h",
       }
     );
+
+    /*const loginUrl = `${process.env.BASE_URL}/login/login.html?token=${jwtToken}`;
+
+    res.redirect(loginUrl);
+    */
     res.status(200).json({
       message: "Account Verified Successfully, You Can Now LOGIN.",
       token: jwtToken,
@@ -90,12 +95,12 @@ async function sendVerificationEmail(email, url) {
 
   const mailOptions = {
     from: {
-      name: "IFS Backend",
+      name: "Fuzik Company",
       address: process.env.EMAIL_USER,
     },
     to: email,
     subject: "Account Verification",
-    text: "Please verify your account by clicking the link below:",
+    text: "Please verify your account by clicking the link below",
     html: html,
   };
 
@@ -122,11 +127,16 @@ async function loginUser(req, res) {
       return res.status(403).json({ message: "Please Activate your account" });
     }
 
+    /*const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ message: "Invalid Password!" });
+    }*/
+
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "24h",
       }
     );
     res.status(200).json({ message: "Login Successfully", token });
